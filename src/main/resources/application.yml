@@ -1,0 +1,5 @@
+
+mongo:
+  database: fintech
+  host: localhost
+  port: 27017
