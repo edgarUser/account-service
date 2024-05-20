@@ -5,6 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @EnableMongoRepositories("com.myfintech.accountservice.repository")
+@EnableFeignClients(basePackages = {"com.myfintech.accountservice.restclient"})
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
   @Value("${mongo.database}")
