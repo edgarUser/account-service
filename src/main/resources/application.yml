@@ -1,5 +1,10 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: account-service
 
 mongo:
   database: fintech
-  host: localhost
-  port: 27017
+  connection: ${mongo_connection_string}

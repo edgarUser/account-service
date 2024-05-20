@@ -1,10 +1,14 @@
 package com.myfintech.accountservice.config;
 
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.ServerAddress;
-import java.util.Collections;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -15,20 +19,38 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
   @Value("${mongo.database}")
   private String database;
 
-  @Value("${mongo.host}")
-  private String host;
+  @Value("${mongo.connection}")
+  private String connection;
 
-  @Value("${mongo.port}")
-  private int port;
-
+  /**
+   * Get database name.
+   *
+   * @return String database name
+   */
   @Override
   protected String getDatabaseName() {
     return database;
   }
 
+  /**
+   * Configure mongodb client.
+   *
+   * @return MongoClient mongo client based on uri connection.
+   */
   @Override
-  protected void configureClientSettings(MongoClientSettings.Builder builder) {
-    builder.applyToClusterSettings(
-        settings -> settings.hosts(Collections.singletonList(new ServerAddress(host, port))));
+  public MongoClient mongoClient() {
+    return MongoClients.create(
+        MongoClientSettings.builder().applyConnectionString(new ConnectionString(connection)).build());
   }
+
+  /**
+   * Transaction manager bean.
+   *
+   * @return MongoTransactionManager
+   */
+  @Bean
+  MongoTransactionManager transactionManager(MongoDatabaseFactory dbFactory) {
+    return new MongoTransactionManager(dbFactory);
+  }
+
 }
