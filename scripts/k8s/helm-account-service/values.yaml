@@ -1,0 +1,45 @@
+application:
+  name: account-service
+  image: com.myfintech/account-service:0.0.1-SNAPSHOT
+
+configMap:
+  name: connection-config
+  connection: mongodb://mongodb-replicaset-headless:27017
+
+deployment:
+  replicas: 1
+
+service:
+  name: account-k8s-service
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  name: myfintech
+  host: ideation.example.com
+  port: 8080
+
+mongodb:
+  enabled: true
+  architecture: replicaset
+  fullnameOverride: "mongodb-replicaset"
+  replicaSetName: rs0
+  podAffinityPreset: soft
+  image:
+    repository: bitnami/mongodb
+    tag: 6.0.13
+  auth:
+    enabled: false
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  persistence:
+    enabled: true
+    # storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
