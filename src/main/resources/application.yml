@@ -1,5 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: account-service
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true               #enabled it delegate to circuitbreaker acts including fallback.
+      alphanumeric-ids:
+        enabled: true
+      client:
+        config:
+          default:
+            connectTimeout: 10000   #Connection time out in ms (time needed for the TCP handshake).
+            readTimeout: 5000       #Read time out in ms (time needed to read data from the socket).
+            loggerLevel: basic
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        failureRateThreshold: 50                    #Percentage of calls that need to fail before the circuit moves to open state.
+        slowCallRateThreshold: 50                   #Percentage of call that are considered slow before the circuit moves to open state.
+        slowCallDurationThreshold: PT5S             #Duration of a call before it is considered as slow call.
+        permittedNumberOfCallsInHalfOpenState: 3    #Max number of calls when the circuit is in half-open state.
+        slidingWindowType: COUNT_BASED              #Use a circular array of the last number of calls to calculate thresholds.
+        slidingWindowSize: 10                        #Number of requests to record and aggregate, irrespective of how long between calls.
+        minimumNumberOfCalls: 10                     #Min number of calls before calculating failure-slow rate threshold.
+        waitDurationInOpenState: PT5S               #Duration to wait until open circuit closes.
+        ignoreExceptions:
+          - feign.FeignException.FeignClientException #Client Exceptions (4xx) should not trip the circuit except 429
+    instances:
+      exchangeServiceCircuitBraker:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 10s       #Circuit breaker add a time limit that must be aligned with feign connect timeout
+
+logging:
+  level:
+    root: INFO
+    com.mycom.resourceservice.restclient.TrustServiceClient: DEBUG
 
 mongo:
   database: fintech
-  host: localhost
-  port: 27017
+  connection: ${mongo_connection_string}
