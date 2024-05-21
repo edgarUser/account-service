@@ -7,7 +7,7 @@ configMap:
   connection: mongodb://mongodb-replicaset-headless:27017
 
 deployment:
-  replicas: 1
+  replicas: 2
 
 service:
   name: account-k8s-service
@@ -22,12 +22,13 @@ ingress:
 mongodb:
   enabled: true
   architecture: replicaset
+  replicaCount: 2
   fullnameOverride: "mongodb-replicaset"
   replicaSetName: rs0
   podAffinityPreset: soft
   image:
     repository: bitnami/mongodb
-    tag: 6.0.13
+    tag: latest
   auth:
     enabled: false
   resources:
@@ -40,6 +41,6 @@ mongodb:
   persistence:
     enabled: true
     # storageClass: ""
-    accessModes:
-      - ReadWriteOnce
+    #accessModes:
+    #  - ReadWriteOnce
     size: 1Gi
