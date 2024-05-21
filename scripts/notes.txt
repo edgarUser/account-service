@@ -1,0 +1,12 @@
+sh scripts/infra/minikube.sh -a on
+
+Commands:
+helm dependency build
+helm template release .
+helm install release .
+helm upgrade release .
+
+
+mongodb-service: graviteeio-apim-mongodb-replicaset-headless, graviteeio-apim-mongodb-replicaset-arbiter-headless
+
+./gradlew jibDockerBuild
