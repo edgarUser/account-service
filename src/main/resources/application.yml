@@ -16,9 +16,6 @@ spring:
             connectTimeout: 10000   #Connection time out in ms (time needed for the TCP handshake).
             readTimeout: 5000       #Read time out in ms (time needed to read data from the socket).
             loggerLevel: basic
-  data:
-    mongodb:
-      auto-index-creation: false
 
 resilience4j:
   circuitbreaker:

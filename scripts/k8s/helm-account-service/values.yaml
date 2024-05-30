@@ -4,11 +4,10 @@ application:
 
 configMap:
   name: connection-config
-  connection: mongodb://mongodb-replicaset-headless:27017
+  connection: mongodb://mongodb-replicaset-headless:27017/?replicaSet=rs0&retryWrites=true&w=majority&EnableReplicaSet=1
 
 deployment:
-  replicas: 2
-
+  replicas: 5
 service:
   name: account-k8s-service
   port: 8080
@@ -22,7 +21,7 @@ ingress:
 mongodb:
   enabled: true
   architecture: replicaset
-  replicaCount: 2
+  replicaCount: 4
   fullnameOverride: "mongodb-replicaset"
   replicaSetName: rs0
   podAffinityPreset: soft
@@ -40,7 +39,7 @@ mongodb:
       memory: 256Mi
   persistence:
     enabled: true
-    # storageClass: ""
-    #accessModes:
-    #  - ReadWriteOnce
+    #storageClass: ""
+    accessModes:
+      - ReadWriteOnce
     size: 1Gi

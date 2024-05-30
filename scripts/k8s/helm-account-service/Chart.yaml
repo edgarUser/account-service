@@ -1,5 +1,5 @@
 apiVersion: v2
-name: ideation
+name: myfintech
 description: Helm chart to deploy account service
 type: application
 version: 0.1.1
