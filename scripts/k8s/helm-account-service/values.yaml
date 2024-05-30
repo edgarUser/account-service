@@ -16,7 +16,7 @@ service:
 
 ingress:
   name: myfintech
-  host: ideation.example.com
+  host: myfintech.com
   port: 8080
 
 mongodb:

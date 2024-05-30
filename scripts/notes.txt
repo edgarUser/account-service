@@ -1,12 +1,14 @@
+Java commands:
+./gradlew clean build
+./gradlew bootRun
+./gradlew jibDockerBuild
+
+Shell commands:
 sh scripts/infra/minikube.sh -a on
 
-Commands:
+Helm commands:
 helm dependency build
 helm template release .
 helm install release .
 helm upgrade release .
 
-
-mongodb-service: graviteeio-apim-mongodb-replicaset-headless, graviteeio-apim-mongodb-replicaset-arbiter-headless
-
-./gradlew jibDockerBuild
